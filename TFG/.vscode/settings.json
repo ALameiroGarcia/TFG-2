@@ -1,0 +1,13 @@
+{
+    "idf.adapterTargetName": "esp32",
+    "idf.portWin": "COM3",
+    "idf.flashType": "UART",
+    "files.associations": {
+        "nvs_flash.h": "c",
+        "web_server.h": "c",
+        "event_groups.h": "c",
+        "wifi_ap.h": "c",
+        "cjson.h": "c",
+        "gpio.h": "c"
+    }
+}
