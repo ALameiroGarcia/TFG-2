@@ -3,10 +3,16 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 import joblib
+import subprocess
+import threading
+
+import csv
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from flask import Flask, request, jsonify
+from datetime import datetime
 
 st.set_page_config(page_title="Detector de Materiales", layout="centered")
 st.title("🔬 Identificador de Materiales con Sensor AS7265x")
@@ -24,7 +30,68 @@ if "escalador" not in st.session_state:
 if "modelo_entrenado" not in st.session_state:
     st.session_state.modelo_entrenado = False
 
-# ------------------ Sección 1: Entrenamiento ------------------
+# ------------------ Sección 1: Servidor Flask ------------------
+
+st.header("🌐 Servidor para Recepción Remota de Datos")
+
+# Variables globales
+nombre_medicion = st.text_input("📝 ¿Qué estás midiendo?", "material_desconocido")
+iniciar_servidor = st.button("🚀 Iniciar servidor y descargar las telemetrías")
+
+# Definiciones necesarias
+expected_channels = ['R', 'S', 'T', 'U', 'V', 'W', 'G', 'H', 'I', 'J', 'K', 'L', 'A', 'B', 'C', 'D', 'E', 'F']
+CSV_FILE = f'espectroscopia_{nombre_medicion.lower().strip()}.csv'
+
+# Flask App (creada pero no ejecutada todavía)
+flask_app = Flask(__name__)
+
+@flask_app.route('/api/as7265x-data', methods=['POST'])
+def recibir_datos_as7265x():
+    data = request.get_json()
+    if not all(channel in data for channel in expected_channels):
+        return jsonify({"error": "Faltan algunos canales"}), 400
+
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    row_data = {"timestamp": timestamp}
+    for channel in expected_channels:
+        row_data[channel] = data.get(channel, 0)
+
+    # Crear archivo si no existe
+    if not os.path.exists(CSV_FILE):
+        with open(CSV_FILE, 'w', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=['timestamp'] + expected_channels)
+            writer.writeheader()
+
+    # Escribir datos
+    with open(CSV_FILE, 'a', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=['timestamp'] + expected_channels)
+        writer.writerow(row_data)
+
+    return jsonify({"mensaje": "Datos recibidos correctamente"}), 200
+
+# Función para ejecutar Flask
+def run_flask():
+    flask_app.run(host='0.0.0.0', port=5000)
+
+# Iniciar servidor y ngrok
+if iniciar_servidor:
+    st.write("🔄 Iniciando servidor Flask en segundo plano...")
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True
+    flask_thread.start()
+
+    try:
+        subprocess.Popen([
+            "powershell", "-Command",
+            'Start-Process "ngrok" -ArgumentList "http", "--url=climbing-champion-werewolf.ngrok-free.app", "5000"'
+        ])
+        st.success("✅ Servidor Flask corriendo en http://localhost:5000")
+        st.info("🌍 Ngrok está exponiendo el servidor públicamente.")
+    except Exception as e:
+        st.error(f"❌ Error iniciando ngrok: {e}")
+
+
+# ------------------ Sección 2: Entrenamiento ------------------
 
 st.header("📁 Cargar datos de entrenamiento")
 
@@ -71,7 +138,7 @@ if archivos_entrenamiento:
             st.text("📊 Reporte del modelo:")
             st.text(reporte)
 
-# ------------------ Sección 2: Guardar y cargar modelos ------------------
+# ------------------ Sección 3: Guardar y cargar modelos ------------------
 
 st.header("💾 Guardar o cargar modelo entrenado")
 
@@ -107,7 +174,7 @@ if modelos_disponibles:
 else:
     st.info("No hay modelos guardados todavía.")
 
-# ------------------ Sección 3: Predicción ------------------
+# ------------------ Sección 4: Predicción ------------------
 
 st.header("🔎 Analizar nueva medición")
 
@@ -160,7 +227,7 @@ if archivo_medicion:
     else:
         st.error("❌ El archivo no contiene las columnas A–W.")
 
-# ------------------ Sección 4: Comparación ------------------
+# ------------------ Sección 5: Comparación ------------------
 
 st.header("📊 Comparación de espectros promedio")
 

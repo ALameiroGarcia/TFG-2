@@ -1,2 +1,0 @@
-
-Start-Process "ngrok" -ArgumentList "http", "--url=climbing-champion-werewolf.ngrok-free.app", "5000"
