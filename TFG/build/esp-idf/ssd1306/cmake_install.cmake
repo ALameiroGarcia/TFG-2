@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/lamei/Desktop/TFG/SBC_M05_AQUANIR-main/TFG/components/ssd1306
+# Install script for directory: C:/Users/lamei/Desktop/TFG/TFG-2/TFG/components/ssd1306
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -5,6 +5,7 @@
 
 void start_wifi_ap();
 void connect_to_wifi(const char *ssid, const char *password);
+bool save_wifi_credentials(const char *ssid, const char *password);
 bool wifi_is_connected();
 void try_auto_connect();
 

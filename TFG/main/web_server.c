@@ -107,6 +107,13 @@ esp_err_t post_handler(httpd_req_t *req) {
 
     ESP_LOGI(TAG, "SSID: %s", ssid);
     ESP_LOGI(TAG, "Password: %s", password);
+    
+    // Guardar en NVS antes de intentar conectar
+    if (!save_wifi_credentials(ssid, password)) {
+        ESP_LOGE(TAG, "No se pudieron guardar las credenciales.");
+        httpd_resp_send(req, "Error guardando credenciales", HTTPD_RESP_USE_STRLEN);
+        return ESP_FAIL;
+    }
 
     httpd_resp_send(req, "Conectando a WiFi...", HTTPD_RESP_USE_STRLEN);
 

@@ -166,6 +166,40 @@ bool load_wifi_credentials(char *ssid, char *password) {
     return false;
 }
 
+bool save_wifi_credentials(const char *ssid, const char *password) {
+    nvs_handle_t nvs_handle;
+    esp_err_t err = nvs_open("storage", NVS_READWRITE, &nvs_handle);
+    if (err != ESP_OK) {
+        ESP_LOGE("NVS", "No se pudo abrir NVS para escritura (%s)", esp_err_to_name(err));
+        return false;
+    }
+
+    err = nvs_set_str(nvs_handle, "ssid", ssid);
+    if (err != ESP_OK) {
+        nvs_close(nvs_handle);
+        ESP_LOGE("NVS", "Error al guardar SSID");
+        return false;
+    }
+
+    err = nvs_set_str(nvs_handle, "password", password);
+    if (err != ESP_OK) {
+        nvs_close(nvs_handle);
+        ESP_LOGE("NVS", "Error al guardar contraseña");
+        return false;
+    }
+
+    err = nvs_commit(nvs_handle);
+    nvs_close(nvs_handle);
+
+    if (err != ESP_OK) {
+        ESP_LOGE("NVS", "Error al hacer commit de los datos");
+        return false;
+    }
+
+    ESP_LOGI("NVS", "Credenciales WiFi guardadas correctamente ✅");
+    return true;
+}
+
 // Intentar conectar automáticamente con credenciales guardadas
 void try_auto_connect() {
     char ssid[32] = {0}, password[64] = {0};
