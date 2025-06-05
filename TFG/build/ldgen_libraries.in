@@ -82,4 +82,3 @@ $<TARGET_FILE:__idf_rt>
 $<TARGET_FILE:__idf_spiffs>
 $<TARGET_FILE:__idf_wifi_provisioning>
 $<TARGET_FILE:__idf_main>
-$<TARGET_FILE:__idf_ssd1306>

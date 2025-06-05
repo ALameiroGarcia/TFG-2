@@ -8,6 +8,8 @@
 #include "web_server.h"
 #include "esp_http_client.h"
 #include "thingsboard_control.h"
+#include "oled.h"
+
 #define AP_SSID "ESP32_AP"
 #define AP_PASS "12345678"
 #define MAX_STA_CONN 4
@@ -23,15 +25,18 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t e
         switch (event_id) {
             case WIFI_EVENT_STA_START:
                 ESP_LOGI(TAG, "WiFi iniciando, intentando conectar...");
+                hud_display_message("Wi-Fi iniciando...",3);
                 esp_wifi_connect();
                 break;
 
             case WIFI_EVENT_STA_CONNECTED:
                 ESP_LOGI(TAG, "WiFi conectado.");
+                
                 break;
 
             case WIFI_EVENT_STA_DISCONNECTED:
                 ESP_LOGW(TAG, "WiFi desconectado. Intentando reconectar...");
+                hud_display_wifi(false);
                 wifi_connected = false;
                 esp_wifi_connect();
                 break;
@@ -41,6 +46,8 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base, int32_t e
         }
     } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
         ESP_LOGI(TAG, "Dirección IP obtenida.");
+        hud_display_message("",3);
+        hud_display_wifi(true);
         wifi_connected = true;
     }
 }

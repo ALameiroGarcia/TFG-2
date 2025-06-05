@@ -17,6 +17,7 @@
 #define TX_VALID 0x01 // Indica si el dato está listo
 
 // Funciones del driver
+void as7265x_init();
 void gpio_init();
 void sensor_task(void *pvParameter);
 #endif // AS7265X_H

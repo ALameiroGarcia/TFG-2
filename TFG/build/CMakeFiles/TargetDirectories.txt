@@ -831,10 +831,3 @@ C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/main/CMakeFiles/list_install_
 C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/main/CMakeFiles/install.dir
 C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/main/CMakeFiles/install/local.dir
 C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/main/CMakeFiles/install/strip.dir
-C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/ssd1306/CMakeFiles/__idf_ssd1306.dir
-C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/ssd1306/CMakeFiles/edit_cache.dir
-C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/ssd1306/CMakeFiles/rebuild_cache.dir
-C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/ssd1306/CMakeFiles/list_install_components.dir
-C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/ssd1306/CMakeFiles/install.dir
-C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/ssd1306/CMakeFiles/install/local.dir
-C:/Users/lamei/Desktop/TFG/TFG-2/TFG/build/esp-idf/ssd1306/CMakeFiles/install/strip.dir

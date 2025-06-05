@@ -4,7 +4,7 @@
 #include "esp_log.h"
 #include "cJSON.h"
 #include "driver/gpio.h"
-
+#include "oled.h"
 #define LED_GPIO GPIO_NUM_2  // LED conectado al pin G2
 
 #define TAG "MQTT_THINGSBOARD"
@@ -106,11 +106,13 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     switch (event->event_id) {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT conectado");
+            hud_display_message("MQTT ON ",7);
             // Suscribir al topic para recibir RPC
             esp_mqtt_client_subscribe(mqtt_client, "v1/devices/me/rpc/request/+", 1);
             break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGI(TAG, "MQTT desconectado");
+            hud_display_message("MQTT OFF",7);
             break;
         case MQTT_EVENT_DATA:
             // Llamar al callback para procesar el mensaje
