@@ -18,7 +18,7 @@ st.set_page_config(page_title="Detector de Materiales", layout="centered")
 st.title("🔬 Identificador de Materiales con Sensor AS7265x")
 
 # Constantes
-CANALES = ['A','B','C','D','E','F','G','H','I','J','K','L','R','S','T','U','V','W']
+CANALES = ['A','B','C','D','E','F','G','H','R','I','S','J','T','U','V','W','K','L']
 MODELOS_DIR = "modelos_guardados"
 os.makedirs(MODELOS_DIR, exist_ok=True)
 
